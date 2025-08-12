@@ -7,6 +7,7 @@ import AnalyticsView from "@/components/analytics-view";
 import SearcherEmpty from "@/components/searcher-empty";
 import Searcher from "@/components/searcher";
 import SettingsView from "@/components/settings-view";
+import SavedSearchesView from "@/components/saved-searches-view";
 import WireframePlaceholder from "@/components/wireframe-placeholder";
 
 type ViewType = "overview" | "sequences" | "contacts" | "analytics" | "searcher" | "searcher-empty" | "saved-lists" | "lists" | "calls" | "tasks" | "workflows" | "duo-copilot" | "settings";
@@ -28,9 +29,14 @@ export default function Dashboard() {
       case "analytics":
         return <WireframePlaceholder title="Analytics" />;
       case "searcher-empty":
-        return <SearcherEmpty />;
+        return <SearcherEmpty onSwitchToPrefilled={() => {
+          setMode("prefilled");
+          setActiveView("searcher");
+        }} />;
       case "searcher":
-        return <Searcher />;
+        return <Searcher mode={mode} />;
+      case "saved-lists":
+        return <SavedSearchesView mode={mode} />;
       case "duo-copilot":
         return <WireframePlaceholder title="Duo Copilot" />;
       case "settings":
@@ -42,7 +48,11 @@ export default function Dashboard() {
 
   const handleSetMode = (newMode: Mode) => {
     setMode(newMode);
-    setActiveView(newMode === "empty" ? "searcher-empty" : "searcher");
+    // Only auto-switch to searcher views if we're currently on the opposite searcher view
+    if ((newMode === "empty" && activeView === "searcher") || 
+        (newMode === "prefilled" && activeView === "searcher-empty")) {
+      setActiveView(newMode === "empty" ? "searcher-empty" : "searcher");
+    }
   };
 
   return (

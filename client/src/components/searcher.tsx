@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Check, Phone, Mail, Send, ArrowUpDown, ChevronDown, ChevronRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Check, Phone, Mail, Send, ArrowUpDown, ChevronDown, ChevronRight, X } from "lucide-react";
 
 const mockLeads = [
   {
@@ -69,12 +70,23 @@ const mockLeads = [
   }
 ];
 
-export default function Searcher() {
+interface SearcherProps {
+  mode?: "empty" | "prefilled";
+}
+
+export default function Searcher({ mode = "empty" }: SearcherProps) {
   const [expandedFilters, setExpandedFilters] = useState({
-    competitorsIntelligence: false,
+    competitorsIntelligence: mode === "prefilled",
     churnAlerts: false,
-    seniority: false
+    seniority: mode === "prefilled"
   });
+
+  const [competitorChips, setCompetitorChips] = useState(
+    mode === "prefilled" ? ["ACME", "Google", "Apple"] : []
+  );
+  const [seniorityChips, setSeniorityChips] = useState(
+    mode === "prefilled" ? ["VP", "Head"] : []
+  );
 
   const toggleFilter = (filterName: keyof typeof expandedFilters) => {
     setExpandedFilters(prev => ({
@@ -82,6 +94,25 @@ export default function Searcher() {
       [filterName]: !prev[filterName]
     }));
   };
+
+  const ChipInput = ({ chips, placeholder }: {
+    chips: string[];
+    placeholder: string;
+  }) => (
+    <div className="border border-gray-300 rounded-md p-2 min-h-[32px] bg-white">
+      <div className="flex flex-wrap gap-1">
+        {chips.map((chip, index) => (
+          <Badge key={index} variant="secondary" className="bg-gray-200 text-gray-700 hover:bg-gray-200 text-xs px-2 py-0.5 h-5 flex items-center gap-1">
+            {chip}
+            <X className="h-3 w-3" />
+          </Badge>
+        ))}
+        {chips.length === 0 && (
+          <span className="text-gray-400 text-sm">{placeholder}</span>
+        )}
+      </div>
+    </div>
+  );
 
   const WireframeList = () => {
     const widths = ["w-24", "w-32", "w-20", "w-28", "w-16", "w-36"];
@@ -122,58 +153,111 @@ export default function Searcher() {
     </div>
   );
 
-  const LeadCard = ({ lead }: { lead: typeof mockLeads[0] }) => (
-    <div className="flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50" data-testid={`lead-${lead.id}`}>
-      <div className="flex items-center space-x-4">
-        <input type="checkbox" className="h-4 w-4 text-gray-600" />
-        <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-xs font-medium">
-          {lead.avatar}
-        </div>
-        <div>
-          <div className="flex items-center space-x-2">
-            <h4 className="font-medium text-gray-900">{lead.name}</h4>
-            <span className="text-blue-500">in</span>
-            <span className="text-blue-500">LinkedIn</span>
+  const LeadCard = ({ lead, mode }: { lead: typeof mockLeads[0]; mode: "empty" | "prefilled" }) => {
+    if (mode === "prefilled") {
+      return (
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50" data-testid={`lead-${lead.id}`}>
+          <div className="flex items-center space-x-4">
+            <input type="checkbox" className="h-4 w-4 text-gray-600" />
+            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-xs font-medium">
+              {lead.avatar}
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <h4 className="font-medium text-gray-900">{lead.name}</h4>
+              </div>
+              <div className="h-3 rounded bg-gray-300 w-32"></div>
+              <div className="h-3 rounded bg-gray-300 w-28"></div>
+            </div>
           </div>
-          <p className="text-sm text-gray-500">{lead.title}</p>
-          <p className="text-sm text-gray-400">{lead.location}</p>
-        </div>
-      </div>
-      
-      <div className="flex items-center space-x-6">
-        <div>
-          <div className="flex items-center space-x-2">
-            <span className="text-blue-500">{lead.company}</span>
-            <span className="text-blue-500">in</span>
-            <span className="text-blue-500">LinkedIn</span>
+          
+          <div className="flex items-center space-x-6">
+            <div className="space-y-2">
+              <div className="h-4 rounded bg-gray-300 w-20"></div>
+              <div className="h-3 rounded bg-gray-300 w-24"></div>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+                <Mail className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+                <Phone className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
-          <p className="text-sm text-gray-400">{lead.employees}</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50" data-testid={`lead-${lead.id}`}>
+        <div className="flex items-center space-x-4">
+          <input type="checkbox" className="h-4 w-4 text-gray-600" />
+          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-xs font-medium">
+            {lead.avatar}
+          </div>
+          <div>
+            <div className="flex items-center space-x-2">
+              <h4 className="font-medium text-gray-900">{lead.name}</h4>
+              <span className="text-blue-500">in</span>
+              <span className="text-blue-500">LinkedIn</span>
+            </div>
+            <p className="text-sm text-gray-500">{lead.title}</p>
+            <p className="text-sm text-gray-400">{lead.location}</p>
+          </div>
         </div>
         
-        <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
-            <Mail className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
-            <Phone className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
-            <Send className="h-4 w-4" />
-          </Button>
+        <div className="flex items-center space-x-6">
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="text-blue-500">{lead.company}</span>
+              <span className="text-blue-500">in</span>
+              <span className="text-blue-500">LinkedIn</span>
+            </div>
+            <p className="text-sm text-gray-400">{lead.employees}</p>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+              <Mail className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+              <Phone className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="flex h-full" data-testid="searcher">
       {/* Left Sidebar - Filters */}
       <div className="w-80 bg-gray-50 border-r border-gray-300 p-4">
-        <h3 className="font-bold text-gray-900 mb-4 text-xs tracking-wide">SMART INSIGHTS</h3>
+        <div className="flex items-center mb-4">
+          <h3 className="font-bold text-gray-900 text-xs tracking-wide">SMART INSIGHTS</h3>
+          <Badge variant="secondary" className="ml-2 bg-gray-200 text-gray-700 text-xs px-2 py-0.5 h-5">New</Badge>
+        </div>
         <div className="mb-6 space-y-3">
           <CollapsibleFilter name="Competitors Intelligence" filterKey="competitorsIntelligence">
-            <div className="h-3 rounded bg-gray-300 w-28" />
-            <div className="h-3 rounded bg-gray-300 w-20" />
+            {mode === "prefilled" ? (
+              <ChipInput
+                chips={competitorChips}
+                placeholder="Add competitors..."
+              />
+            ) : (
+              <>
+                <div className="h-3 rounded bg-gray-300 w-28" />
+                <div className="h-3 rounded bg-gray-300 w-20" />
+              </>
+            )}
           </CollapsibleFilter>
           <CollapsibleFilter name="Churn alerts" filterKey="churnAlerts">
             <div className="h-3 rounded bg-gray-300 w-24" />
@@ -193,9 +277,18 @@ export default function Searcher() {
             </div>
           </div>
           <CollapsibleFilter name="Seniority" filterKey="seniority">
-            <div className="h-3 rounded bg-gray-300 w-20" />
-            <div className="h-3 rounded bg-gray-300 w-28" />
-            <div className="h-3 rounded bg-gray-300 w-16" />
+            {mode === "prefilled" ? (
+              <ChipInput
+                chips={seniorityChips}
+                placeholder="Add seniority levels..."
+              />
+            ) : (
+              <>
+                <div className="h-3 rounded bg-gray-300 w-20" />
+                <div className="h-3 rounded bg-gray-300 w-28" />
+                <div className="h-3 rounded bg-gray-300 w-16" />
+              </>
+            )}
           </CollapsibleFilter>
         </div>
         <h3 className="font-bold text-gray-900 mb-4 text-xs tracking-wide">COMPANY</h3>
@@ -255,7 +348,7 @@ export default function Searcher() {
         <Card className="border-0 rounded-none" data-testid="search-results">
           <CardContent className="p-0">
             {mockLeads.map((lead) => (
-              <LeadCard key={lead.id} lead={lead} />
+              <LeadCard key={lead.id} lead={lead} mode={mode} />
             ))}
           </CardContent>
         </Card>

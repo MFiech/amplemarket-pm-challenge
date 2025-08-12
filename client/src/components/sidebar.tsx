@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ChevronDown, ChevronRight, BarChart3, Home, Search, Bookmark, List, Send, Phone, CheckSquare, Users, ServerCog, PanelLeftClose, PanelLeftOpen, Settings } from "lucide-react";
 
@@ -41,7 +42,8 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
     children, 
     className = "",
     disabled = false,
-    tooltip
+    tooltip,
+    showNew = false
   }: { 
     view: ViewType; 
     icon: React.ComponentType<any>; 
@@ -49,6 +51,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
     className?: string;
     disabled?: boolean;
     tooltip?: string;
+    showNew?: boolean;
   }) => {
     const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -105,7 +108,12 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
         data-testid={`nav-${view}`}
       >
         <Icon className="mr-3 h-4 w-4" />
-        {children}
+        <div className="flex items-center justify-between flex-1">
+          <span>{children}</span>
+          {showNew && (
+            <Badge variant="secondary" className="ml-2 bg-gray-200 text-gray-700 text-xs px-2 py-0.5 h-5">New</Badge>
+          )}
+        </div>
       </Button>
     );
 
@@ -184,13 +192,14 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
               <NavButton
                 view={(mode ?? "empty") === "empty" ? "searcher-empty" : "searcher"}
                 icon={Search}
+                showNew
               >
                 Searcher
               </NavButton>
-              <NavButton view="saved-lists" icon={Bookmark} disabled tooltip="Not available in this prototype">
+              <NavButton view="saved-lists" icon={Bookmark}>
                 Saved Searches
               </NavButton>
-              <NavButton view="lists" icon={List}>
+              <NavButton view="lists" icon={List} disabled tooltip="Not available in this prototype">
                 Lists
               </NavButton>
             </div>
@@ -285,13 +294,14 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
                 <NavButton
                   view={(mode ?? "empty") === "empty" ? "searcher-empty" : "searcher"}
                   icon={Search}
+                  showNew
                 >
                   Searcher
                 </NavButton>
-                <NavButton view="saved-lists" icon={Bookmark} disabled tooltip="Not available in this prototype">
+                <NavButton view="saved-lists" icon={Bookmark}>
                   Saved Searches
                 </NavButton>
-                <NavButton view="lists" icon={List}>
+                <NavButton view="lists" icon={List} disabled tooltip="Not available in this prototype">
                   Lists
                 </NavButton>
               </div>
