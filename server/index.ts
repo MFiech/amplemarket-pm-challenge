@@ -1,10 +1,21 @@
 import express, { type Request, Response, NextFunction } from "express";
+import { webcrypto as nodeWebCrypto } from "crypto";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Ensure Web Crypto API is available for Vite/plugins expecting `crypto.getRandomValues`
+if (typeof globalThis.crypto === "undefined" && nodeWebCrypto) {
+  Object.defineProperty(globalThis, "crypto", {
+    value: nodeWebCrypto,
+    writable: false,
+    enumerable: false,
+    configurable: false,
+  });
+}
 
 app.use((req, res, next) => {
   const start = Date.now();

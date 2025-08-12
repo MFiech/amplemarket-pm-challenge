@@ -1,23 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Search, ChevronDown } from "lucide-react";
+import { Search } from "lucide-react";
 
 export default function SearcherEmpty() {
-  const FilterSection = ({ title, items }: { title: string; items: string[] }) => (
-    <div className="mb-6">
-      <Button
-        variant="ghost"
-        className="w-full justify-between text-sm font-medium text-gray-700 hover:bg-gray-100 h-auto py-2 px-3 mb-2"
-      >
-        <span>{title}</span>
-        <ChevronDown className="h-3 w-3" />
-      </Button>
-      <div className="space-y-1 ml-4">
-        {items.map((item, index) => (
-          <div key={index} className="text-sm text-gray-600 py-1">{item}</div>
-        ))}
-      </div>
+  const WireframeList = () => (
+    <div className="space-y-2">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div
+          key={index}
+          className="h-8 rounded border-2 border-dashed border-gray-300 bg-gray-100"
+        />
+      ))}
     </div>
   );
 
@@ -25,58 +18,17 @@ export default function SearcherEmpty() {
     <div className="flex h-full" data-testid="searcher-empty">
       {/* Left Sidebar - Filters */}
       <div className="w-80 bg-gray-50 border-r border-gray-300 p-4">
-        <h3 className="font-semibold text-gray-900 mb-4 text-sm">Filters</h3>
-        
-        <FilterSection
-          title="INTELLIGENCE"
-          items={["Job Change Alerts", "Buying Intent Signals", "Personas", "CRM Based Filters"]}
-        />
-        
-        <FilterSection
-          title="PERSON"
-          items={["Name", "Titles", "Recent Job Changes", "Locations", "Keywords", "LinkedIn Networks"]}
-        />
-        
-        <FilterSection
-          title="COMPANY"
-          items={["Current Company", "Past Company", "Keywords"]}
-        />
+        <h3 className="font-semibold text-gray-900 mb-4 text-sm">PERSON</h3>
+        <div className="mb-6">
+          <WireframeList />
+        </div>
+        <h3 className="font-semibold text-gray-900 mb-4 text-sm">COMPANY</h3>
+        <WireframeList />
       </div>
 
       {/* Right Main Content */}
       <div className="flex-1 p-6">
-        {/* Search Bar */}
-        <div className="mb-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input 
-              type="text" 
-              placeholder="Search contacts by name, email, or company domain" 
-              className="pl-10 pr-4 py-3 w-full border-2 border-gray-300"
-              data-testid="search-input"
-            />
-          </div>
-          <div className="flex justify-end mt-2">
-            <Button className="bg-gray-600 hover:bg-gray-700 text-white px-6" data-testid="save-search">
-              Save Search
-            </Button>
-          </div>
-        </div>
-
-        {/* Tab Navigation */}
-        <div className="border-b border-gray-300 mb-8">
-          <nav className="flex space-x-8">
-            <Button variant="ghost" className="py-2 text-sm font-medium border-b-2 border-gray-600 text-gray-900 rounded-none">
-              Overview
-            </Button>
-            <Button variant="ghost" className="py-2 text-sm font-medium text-gray-500 rounded-none">
-              Events And Conferences
-            </Button>
-            <Button variant="ghost" className="py-2 text-sm font-medium text-gray-500 rounded-none">
-              Company Hubs
-            </Button>
-          </nav>
-        </div>
+        {/* Removed top search bar and tabs per requirements */}
 
         {/* Empty State Content */}
         <Card className="border-2 border-dashed border-gray-300" data-testid="empty-state">
@@ -87,7 +39,7 @@ export default function SearcherEmpty() {
                 The search for your next customer starts here!
               </h3>
               <p className="text-gray-500 mb-6">
-                Use the search bar on the left or try one of the samples below
+                Use the filters on the left or try one of the samples below
               </p>
             </div>
 

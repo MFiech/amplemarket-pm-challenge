@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Search, ChevronDown, Check, Phone, Mail, Send, ArrowUpDown } from "lucide-react";
+import { Check, Phone, Mail, Send, ArrowUpDown } from "lucide-react";
 
 const mockLeads = [
   {
@@ -70,24 +69,19 @@ const mockLeads = [
 ];
 
 export default function Searcher() {
-  const FilterSection = ({ title, items, expanded = false }: { title: string; items: string[]; expanded?: boolean }) => (
-    <div className="mb-4">
-      <Button
-        variant="ghost"
-        className="w-full justify-between text-sm font-medium text-gray-700 hover:bg-gray-100 h-auto py-2 px-3 mb-2"
-      >
-        <span>{title}</span>
-        <ChevronDown className="h-3 w-3" />
-      </Button>
-      {expanded && (
-        <div className="space-y-1 ml-4">
-          {items.map((item, index) => (
-            <div key={index} className="text-sm text-gray-600 py-1">{item}</div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const WireframeList = () => {
+    const widths = ["w-24", "w-32", "w-20", "w-28", "w-16", "w-36"];
+    return (
+      <div className="space-y-2">
+        {Array.from({ length: 6 }).map((_, index) => (
+          <div
+            key={index}
+            className={`h-4 rounded bg-gray-300 ${widths[index]}`}
+          />
+        ))}
+      </div>
+    );
+  };
 
   const LeadCard = ({ lead }: { lead: typeof mockLeads[0] }) => (
     <div className="flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50" data-testid={`lead-${lead.id}`}>
@@ -136,50 +130,12 @@ export default function Searcher() {
     <div className="flex h-full" data-testid="searcher">
       {/* Left Sidebar - Filters */}
       <div className="w-80 bg-gray-50 border-r border-gray-300 p-4">
-        <h3 className="font-semibold text-gray-900 mb-4 text-sm">INTELLIGENCE</h3>
-        
-        <FilterSection
-          title="Job Change Alerts"
-          items={[]}
-        />
-        
-        <FilterSection
-          title="Buying Intent Signals"
-          items={[]}
-        />
-        
-        <FilterSection
-          title="Personas"
-          items={[]}
-        />
-        
-        <FilterSection
-          title="CRM Based Filters"
-          items={[]}
-        />
-
-        <h3 className="font-semibold text-gray-900 mb-4 mt-6 text-sm">PERSON</h3>
-        
-        <FilterSection
-          title="Name"
-          items={[]}
-        />
-        
-        <FilterSection
-          title="Titles"
-          items={["Seniorities", "Select seniorities..."]}
-          expanded={true}
-        />
-
-        <div className="mb-4">
-          <Input placeholder="marketing" className="text-sm border-gray-300" />
+        <h3 className="font-semibold text-gray-900 mb-4 text-sm">PERSON</h3>
+        <div className="mb-6">
+          <WireframeList />
         </div>
-        
-        <FilterSection
-          title="Departments & Job Functions"
-          items={["Sales", "Education", "Finance", "Information Technology", "Engineering Technical", "Operations", "Marketing", "Human Resources", "C-Suite", "Design", "Consulting"]}
-          expanded={true}
-        />
+        <h3 className="font-semibold text-gray-900 mb-4 text-sm">COMPANY</h3>
+        <WireframeList />
       </div>
 
       {/* Right Main Content */}
