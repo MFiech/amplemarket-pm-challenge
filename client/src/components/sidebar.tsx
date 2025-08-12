@@ -1,0 +1,192 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronRight, BarChart3, Plus, Home, Search, Bookmark, List, Send, Phone, CheckSquare, Users, ServerCog } from "lucide-react";
+
+type ViewType = "overview" | "sequences" | "contacts" | "analytics" | "searcher" | "searcher-empty" | "saved-lists" | "lists" | "calls" | "tasks" | "workflows" | "duo-copilot";
+
+interface SidebarProps {
+  activeView: ViewType;
+  onViewChange: (view: ViewType) => void;
+}
+
+interface SectionState {
+  prospect: boolean;
+  engage: boolean;
+  analyze: boolean;
+  automate: boolean;
+}
+
+export default function Sidebar({ activeView, onViewChange }: SidebarProps) {
+  const [expandedSections, setExpandedSections] = useState<SectionState>({
+    prospect: true,
+    engage: true,
+    analyze: true,
+    automate: true,
+  });
+
+  const toggleSection = (section: keyof SectionState) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
+  const NavButton = ({ 
+    view, 
+    icon: Icon, 
+    children, 
+    className = "" 
+  }: { 
+    view: ViewType; 
+    icon: React.ComponentType<any>; 
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <Button
+      variant="ghost"
+      className={`w-full justify-start text-sm font-medium h-auto py-2 px-3 border ${
+        activeView === view 
+          ? "bg-gray-200 text-gray-900 border-gray-400" 
+          : "text-gray-600 hover:bg-gray-100 border-transparent"
+      } ${className}`}
+      onClick={() => onViewChange(view)}
+      data-testid={`nav-${view}`}
+    >
+      <Icon className="mr-3 h-4 w-4" />
+      {children}
+    </Button>
+  );
+
+  const SectionToggle = ({ 
+    section, 
+    children 
+  }: { 
+    section: keyof SectionState; 
+    children: React.ReactNode;
+  }) => (
+    <Button
+      variant="ghost"
+      className="w-full justify-between text-sm text-gray-600 hover:bg-gray-100 h-auto py-2 px-3"
+      onClick={() => toggleSection(section)}
+      data-testid={`toggle-${section}`}
+    >
+      <span className="flex items-center">
+        {expandedSections[section] ? (
+          <ChevronDown className="mr-2 h-3 w-3" />
+        ) : (
+          <ChevronRight className="mr-2 h-3 w-3" />
+        )}
+        {children}
+      </span>
+    </Button>
+  );
+
+  return (
+    <div className="w-80 bg-white border-r border-gray-300 flex-shrink-0" data-testid="sidebar">
+      {/* Header */}
+      <div className="p-4 border-b border-gray-300">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-gray-800 rounded flex items-center justify-center">
+            <BarChart3 className="text-white h-4 w-4" />
+          </div>
+          <h1 className="text-lg font-semibold text-gray-900">Amplemarket</h1>
+        </div>
+        
+        <Button
+          variant="ghost"
+          className="w-full mt-4 justify-between text-sm text-gray-600 hover:bg-gray-100 h-auto py-2 px-3 border border-gray-300"
+          data-testid="quick-actions"
+        >
+          <span className="flex items-center">
+            <Plus className="mr-2 h-4 w-4" />
+            Quick actions
+          </span>
+          <span className="text-xs text-gray-400">⌘K</span>
+        </Button>
+      </div>
+
+      {/* Navigation */}
+      <nav className="p-4 space-y-1 overflow-y-auto">
+        {/* Duo Copilot */}
+        <div className="mb-4">
+          <NavButton view="duo-copilot" icon={BarChart3}>
+            Duo Copilot
+          </NavButton>
+        </div>
+
+        {/* Main Navigation */}
+        <div className="mb-6">
+          <NavButton view="overview" icon={Home}>
+            Overview
+          </NavButton>
+        </div>
+
+        {/* Prospect Section */}
+        <div className="mb-4">
+          <SectionToggle section="prospect">Prospect</SectionToggle>
+          {expandedSections.prospect && (
+            <div className="ml-6 mt-1 space-y-1">
+              <NavButton view="searcher-empty" icon={Search}>
+                Searcher (empty state)
+              </NavButton>
+              <NavButton view="searcher" icon={Search}>
+                Searcher
+              </NavButton>
+              <NavButton view="saved-lists" icon={Bookmark}>
+                Saved Lists
+              </NavButton>
+              <NavButton view="lists" icon={List}>
+                Lists
+              </NavButton>
+            </div>
+          )}
+        </div>
+
+        {/* Engage Section */}
+        <div className="mb-4">
+          <SectionToggle section="engage">Engage</SectionToggle>
+          {expandedSections.engage && (
+            <div className="ml-6 mt-1 space-y-1">
+              <NavButton view="sequences" icon={Send}>
+                Sequences
+              </NavButton>
+              <NavButton view="calls" icon={Phone}>
+                Calls
+              </NavButton>
+              <NavButton view="tasks" icon={CheckSquare}>
+                Tasks
+              </NavButton>
+            </div>
+          )}
+        </div>
+
+        {/* Analyze Section */}
+        <div className="mb-4">
+          <SectionToggle section="analyze">Analyze</SectionToggle>
+          {expandedSections.analyze && (
+            <div className="ml-6 mt-1 space-y-1">
+              <NavButton view="analytics" icon={BarChart3}>
+                Analytics
+              </NavButton>
+              <NavButton view="contacts" icon={Users}>
+                Contacts
+              </NavButton>
+            </div>
+          )}
+        </div>
+
+        {/* Automate Section */}
+        <div className="mb-4">
+          <SectionToggle section="automate">Automate</SectionToggle>
+          {expandedSections.automate && (
+            <div className="ml-6 mt-1 space-y-1">
+              <NavButton view="workflows" icon={ServerCog}>
+                Workflows
+              </NavButton>
+            </div>
+          )}
+        </div>
+      </nav>
+    </div>
+  );
+}
