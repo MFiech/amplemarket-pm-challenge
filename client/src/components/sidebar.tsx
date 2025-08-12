@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { ChevronDown, ChevronRight, BarChart3, Home, Search, Bookmark, List, Send, Phone, CheckSquare, Users, ServerCog, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { ChevronDown, ChevronRight, BarChart3, Home, Search, Bookmark, List, Send, Phone, CheckSquare, Users, ServerCog, PanelLeftClose, PanelLeftOpen, Settings } from "lucide-react";
 
-type ViewType = "overview" | "sequences" | "contacts" | "analytics" | "searcher" | "searcher-empty" | "saved-lists" | "lists" | "calls" | "tasks" | "workflows" | "duo-copilot";
+type ViewType = "overview" | "sequences" | "contacts" | "analytics" | "searcher" | "searcher-empty" | "saved-lists" | "lists" | "calls" | "tasks" | "workflows" | "duo-copilot" | "settings";
 type Mode = "empty" | "prefilled";
 
 interface SidebarProps {
@@ -151,7 +151,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
 
   if (collapsed) {
     return (
-      <div className="w-16 bg-white border-r border-gray-300 flex-shrink-0" data-testid="sidebar">
+      <div className="w-16 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col" data-testid="sidebar">
         {/* Collapse toggle at top */}
         <div className="p-3 border-b border-gray-300 flex justify-center">
           <Button
@@ -164,69 +164,78 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
         </div>
 
         {/* Navigation Icons */}
-        <nav className="p-3 space-y-2 overflow-y-auto">
-          {/* Duo Copilot + Overview */}
-          <div className="space-y-2">
-            <NavButton view="duo-copilot" icon={BarChart3}>
-              Duo Copilot
-            </NavButton>
-            <NavButton view="overview" icon={Home}>
-              Overview
-            </NavButton>
+        <nav className="p-3 space-y-2 overflow-y-auto flex flex-col flex-1">
+          <div className="flex-1">
+            {/* Duo Copilot + Overview */}
+            <div className="space-y-2">
+              <NavButton view="duo-copilot" icon={BarChart3}>
+                Duo Copilot
+              </NavButton>
+              <NavButton view="overview" icon={Home}>
+                Overview
+              </NavButton>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-gray-300 my-3"></div>
+
+            {/* Section Icons */}
+            <div className="space-y-2">
+              <NavButton
+                view={(mode ?? "empty") === "empty" ? "searcher-empty" : "searcher"}
+                icon={Search}
+              >
+                Searcher
+              </NavButton>
+              <NavButton view="saved-lists" icon={Bookmark} disabled tooltip="Not available in this prototype">
+                Saved Searches
+              </NavButton>
+              <NavButton view="lists" icon={List}>
+                Lists
+              </NavButton>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-gray-300 my-3"></div>
+
+            <div className="space-y-2">
+              <NavButton view="sequences" icon={Send} disabled tooltip="Not available in this prototype">
+                Sequences
+              </NavButton>
+              <NavButton view="calls" icon={Phone} disabled tooltip="Not available in this prototype">
+                Calls
+              </NavButton>
+              <NavButton view="tasks" icon={CheckSquare} disabled tooltip="Not available in this prototype">
+                Tasks
+              </NavButton>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-gray-300 my-3"></div>
+
+            <div className="space-y-2">
+              <NavButton view="analytics" icon={BarChart3} disabled tooltip="Not available in this prototype">
+                Analytics
+              </NavButton>
+              <NavButton view="contacts" icon={Users} disabled tooltip="Not available in this prototype">
+                Contacts
+              </NavButton>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-gray-300 my-3"></div>
+
+            <div className="space-y-2">
+              <NavButton view="workflows" icon={ServerCog} disabled tooltip="Not available in this prototype">
+                Workflows
+              </NavButton>
+            </div>
           </div>
 
-          {/* Divider */}
-          <div className="border-t border-gray-300 my-3"></div>
-
-          {/* Section Icons */}
-          <div className="space-y-2">
-            <NavButton
-              view={(mode ?? "empty") === "empty" ? "searcher-empty" : "searcher"}
-              icon={Search}
-            >
-              Searcher
-            </NavButton>
-            <NavButton view="saved-lists" icon={Bookmark} disabled tooltip="Not available in this prototype">
-              Saved Searches
-            </NavButton>
-            <NavButton view="lists" icon={List}>
-              Lists
-            </NavButton>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-300 my-3"></div>
-
-          <div className="space-y-2">
-            <NavButton view="sequences" icon={Send} disabled tooltip="Not available in this prototype">
-              Sequences
-            </NavButton>
-            <NavButton view="calls" icon={Phone} disabled tooltip="Not available in this prototype">
-              Calls
-            </NavButton>
-            <NavButton view="tasks" icon={CheckSquare} disabled tooltip="Not available in this prototype">
-              Tasks
-            </NavButton>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-300 my-3"></div>
-
-          <div className="space-y-2">
-            <NavButton view="analytics" icon={BarChart3} disabled tooltip="Not available in this prototype">
-              Analytics
-            </NavButton>
-            <NavButton view="contacts" icon={Users} disabled tooltip="Not available in this prototype">
-              Contacts
-            </NavButton>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-300 my-3"></div>
-
-          <div className="space-y-2">
-            <NavButton view="workflows" icon={ServerCog} disabled tooltip="Not available in this prototype">
-              Workflows
+          {/* Settings at very bottom */}
+          <div className="pt-3 border-t border-gray-300">
+            <NavButton view="settings" icon={Settings}>
+              Settings
             </NavButton>
           </div>
         </nav>
@@ -235,7 +244,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
   }
 
   return (
-    <div className="w-80 bg-white border-r border-gray-300 flex-shrink-0" data-testid="sidebar">
+    <div className="w-80 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col" data-testid="sidebar">
       {/* Header */}
       <div className="p-4 border-b border-gray-300">
         <div className="flex items-center justify-between">
@@ -256,81 +265,90 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
       </div>
 
       {/* Navigation */}
-      <nav className="p-4 space-y-1 overflow-y-auto">
-        {/* Duo Copilot + Overview grouped */}
-        <div className="mb-4 space-y-1">
-          <NavButton view="duo-copilot" icon={BarChart3}>
-            Duo Copilot
+      <nav className="p-4 space-y-1 overflow-y-auto flex flex-col h-full">
+        <div className="flex-1">
+          {/* Duo Copilot + Overview grouped */}
+          <div className="mb-4 space-y-1">
+            <NavButton view="duo-copilot" icon={BarChart3}>
+              Duo Copilot
+            </NavButton>
+            <NavButton view="overview" icon={Home}>
+              Overview
+            </NavButton>
+          </div>
+
+          {/* Prospect Section */}
+          <div className="mb-4">
+            <SectionToggle section="prospect">Prospect</SectionToggle>
+            {expandedSections.prospect && (
+              <div className="ml-6 mt-1 space-y-1">
+                <NavButton
+                  view={(mode ?? "empty") === "empty" ? "searcher-empty" : "searcher"}
+                  icon={Search}
+                >
+                  Searcher
+                </NavButton>
+                <NavButton view="saved-lists" icon={Bookmark} disabled tooltip="Not available in this prototype">
+                  Saved Searches
+                </NavButton>
+                <NavButton view="lists" icon={List}>
+                  Lists
+                </NavButton>
+              </div>
+            )}
+          </div>
+
+          {/* Engage Section */}
+          <div className="mb-4">
+            <SectionToggle section="engage">Engage</SectionToggle>
+            {expandedSections.engage && (
+              <div className="ml-6 mt-1 space-y-1">
+                <NavButton view="sequences" icon={Send} disabled tooltip="Not available in this prototype">
+                  Sequences
+                </NavButton>
+                <NavButton view="calls" icon={Phone} disabled tooltip="Not available in this prototype">
+                  Calls
+                </NavButton>
+                <NavButton view="tasks" icon={CheckSquare} disabled tooltip="Not available in this prototype">
+                  Tasks
+                </NavButton>
+              </div>
+            )}
+          </div>
+
+          {/* Analyze Section */}
+          <div className="mb-4">
+            <SectionToggle section="analyze">Analyze</SectionToggle>
+            {expandedSections.analyze && (
+              <div className="ml-6 mt-1 space-y-1">
+                <NavButton view="analytics" icon={BarChart3} disabled tooltip="Not available in this prototype">
+                  Analytics
+                </NavButton>
+                <NavButton view="contacts" icon={Users} disabled tooltip="Not available in this prototype">
+                  Contacts
+                </NavButton>
+              </div>
+            )}
+          </div>
+
+          {/* Automate Section */}
+          <div className="mb-4">
+            <SectionToggle section="automate">Automate</SectionToggle>
+            {expandedSections.automate && (
+              <div className="ml-6 mt-1 space-y-1">
+                <NavButton view="workflows" icon={ServerCog} disabled tooltip="Not available in this prototype">
+                  Workflows
+                </NavButton>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Settings at very bottom */}
+        <div className="pt-4 border-t border-gray-300">
+          <NavButton view="settings" icon={Settings}>
+            Settings
           </NavButton>
-          <NavButton view="overview" icon={Home}>
-            Overview
-          </NavButton>
-        </div>
-
-        {/* Prospect Section */}
-        <div className="mb-4">
-          <SectionToggle section="prospect">Prospect</SectionToggle>
-          {expandedSections.prospect && (
-            <div className="ml-6 mt-1 space-y-1">
-              <NavButton
-                view={(mode ?? "empty") === "empty" ? "searcher-empty" : "searcher"}
-                icon={Search}
-              >
-                Searcher
-              </NavButton>
-              <NavButton view="saved-lists" icon={Bookmark} disabled tooltip="Not available in this prototype">
-                Saved Searches
-              </NavButton>
-              <NavButton view="lists" icon={List}>
-                Lists
-              </NavButton>
-            </div>
-          )}
-        </div>
-
-        {/* Engage Section */}
-        <div className="mb-4">
-          <SectionToggle section="engage">Engage</SectionToggle>
-          {expandedSections.engage && (
-            <div className="ml-6 mt-1 space-y-1">
-              <NavButton view="sequences" icon={Send} disabled tooltip="Not available in this prototype">
-                Sequences
-              </NavButton>
-              <NavButton view="calls" icon={Phone} disabled tooltip="Not available in this prototype">
-                Calls
-              </NavButton>
-              <NavButton view="tasks" icon={CheckSquare} disabled tooltip="Not available in this prototype">
-                Tasks
-              </NavButton>
-            </div>
-          )}
-        </div>
-
-        {/* Analyze Section */}
-        <div className="mb-4">
-          <SectionToggle section="analyze">Analyze</SectionToggle>
-          {expandedSections.analyze && (
-            <div className="ml-6 mt-1 space-y-1">
-              <NavButton view="analytics" icon={BarChart3} disabled tooltip="Not available in this prototype">
-                Analytics
-              </NavButton>
-              <NavButton view="contacts" icon={Users} disabled tooltip="Not available in this prototype">
-                Contacts
-              </NavButton>
-            </div>
-          )}
-        </div>
-
-        {/* Automate Section */}
-        <div className="mb-4">
-          <SectionToggle section="automate">Automate</SectionToggle>
-          {expandedSections.automate && (
-            <div className="ml-6 mt-1 space-y-1">
-              <NavButton view="workflows" icon={ServerCog} disabled tooltip="Not available in this prototype">
-                Workflows
-              </NavButton>
-            </div>
-          )}
         </div>
       </nav>
     </div>

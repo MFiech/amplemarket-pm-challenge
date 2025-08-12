@@ -6,15 +6,16 @@ import ContactsView from "@/components/contacts-view";
 import AnalyticsView from "@/components/analytics-view";
 import SearcherEmpty from "@/components/searcher-empty";
 import Searcher from "@/components/searcher";
+import SettingsView from "@/components/settings-view";
 import WireframePlaceholder from "@/components/wireframe-placeholder";
 
-type ViewType = "overview" | "sequences" | "contacts" | "analytics" | "searcher" | "searcher-empty" | "saved-lists" | "lists" | "calls" | "tasks" | "workflows" | "duo-copilot";
+type ViewType = "overview" | "sequences" | "contacts" | "analytics" | "searcher" | "searcher-empty" | "saved-lists" | "lists" | "calls" | "tasks" | "workflows" | "duo-copilot" | "settings";
 
 type Mode = "empty" | "prefilled";
 
 export default function Dashboard() {
   const [mode, setMode] = useState<Mode>("empty");
-  const [activeView, setActiveView] = useState<ViewType>("searcher-empty");
+  const [activeView, setActiveView] = useState<ViewType>("settings");
 
   const renderMainContent = () => {
     switch (activeView) {
@@ -32,6 +33,8 @@ export default function Dashboard() {
         return <Searcher />;
       case "duo-copilot":
         return <WireframePlaceholder title="Duo Copilot" />;
+      case "settings":
+        return <SettingsView />;
       default:
         return <WireframePlaceholder title={activeView.charAt(0).toUpperCase() + activeView.slice(1).replace('-', ' ')} />;
     }
