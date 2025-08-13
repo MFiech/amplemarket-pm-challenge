@@ -16,7 +16,7 @@ type Mode = "empty" | "prefilled";
 
 export default function Dashboard() {
   const [mode, setMode] = useState<Mode>("empty");
-  const [activeView, setActiveView] = useState<ViewType>("settings");
+  const [activeView, setActiveView] = useState<ViewType>("searcher-empty");
 
   const renderMainContent = () => {
     switch (activeView) {
