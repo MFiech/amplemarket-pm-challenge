@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Check, Phone, Mail, Send, ArrowUpDown, ChevronDown, ChevronRight, X, Calendar } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Check, Phone, Mail, Send, ArrowUpDown, ChevronDown, ChevronRight, X, Calendar, Info } from "lucide-react";
 
 const mockLeads = [
   {
@@ -73,9 +74,10 @@ const mockLeads = [
 
 interface SearcherProps {
   mode?: "empty" | "prefilled-v1" | "prefilled-v2";
+  onModeChange?: (mode: "prefilled-v1" | "prefilled-v2") => void;
 }
 
-export default function Searcher({ mode = "empty" }: SearcherProps) {
+export default function Searcher({ mode = "empty", onModeChange }: SearcherProps) {
   const isPrefilled = mode === "prefilled-v1" || mode === "prefilled-v2";
   
   const [expandedFilters, setExpandedFilters] = useState({
@@ -131,7 +133,40 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
     return `Engaged with ${randomCompany} ${randomInteractions} times in the last 2 weeks.`;
   };
 
+  // Function to generate sample interactions for tooltip
+  const getSampleInteractions = (leadId: number) => {
+    const companies = mode === "prefilled-v1" 
+      ? ["ACME", "Google", "Apple"] 
+      : mode === "prefilled-v2" 
+        ? ["Salesforce", "HubSpot", "Pipedrive"]
+        : [];
+    const randomCompany = companies[leadId % companies.length];
+    
+    const sampleInteractions = [
+      `Liked ${randomCompany}'s LinkedIn post about AI`,
+      `Attended ${randomCompany}'s webinar "Future of Sales"`,
+      `Downloaded ${randomCompany}'s whitepaper`,
+      `Visited ${randomCompany}'s pricing page`,
+      `Connected with ${randomCompany}'s sales rep`
+    ];
+    
+    const maxToShow = 3;
+    const selectedInteractions = sampleInteractions.slice(0, maxToShow);
+    const hasMore = sampleInteractions.length > maxToShow;
+    
+    return {
+      interactions: selectedInteractions,
+      hasMore
+    };
+  };
+
   const toggleFilter = (filterName: keyof typeof expandedFilters) => {
+    // If in V2 and clicking CI, switch to V1
+    if (mode === "prefilled-v2" && filterName === "competitorsIntelligence") {
+      onModeChange?.("prefilled-v1");
+      return;
+    }
+    
     // Prevent expansion of certain filters based on mode
     if (mode === "prefilled-v2" && (filterName === "competitorsIntelligence" || filterName === "churnAlerts")) {
       return; // Do nothing - don't allow expansion
@@ -183,26 +218,43 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
     name: string; 
     filterKey: keyof typeof expandedFilters;
     children: React.ReactNode;
-  }) => (
-    <div className="space-y-2">
-      <button
-        onClick={() => toggleFilter(filterKey)}
-        className="flex items-center w-full text-left text-sm text-gray-700 hover:text-gray-900 focus:outline-none"
-      >
-        {expandedFilters[filterKey] ? (
-          <ChevronDown className="h-3 w-3 mr-2 text-gray-500" />
-        ) : (
-          <ChevronRight className="h-3 w-3 mr-2 text-gray-500" />
-        )}
-        {name}
-      </button>
-      {expandedFilters[filterKey] && (
-        <div className="ml-5 space-y-1">
-          {children}
+  }) => {
+    const isChurnAlerts = filterKey === "churnAlerts";
+    const isCompetitorsIntelligenceInV1 = mode === "prefilled-v1" && filterKey === "competitorsIntelligence";
+    
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => toggleFilter(filterKey)}
+            className={`flex items-center text-left text-sm text-gray-700 hover:text-gray-900 focus:outline-none flex-1 ${
+              isChurnAlerts ? "cursor-default hover:text-gray-700" : ""
+            }`}
+          >
+            {expandedFilters[filterKey] ? (
+              <ChevronDown className="h-3 w-3 mr-2 text-gray-500" />
+            ) : (
+              <ChevronRight className="h-3 w-3 mr-2 text-gray-500" />
+            )}
+            {name}
+          </button>
+          {isCompetitorsIntelligenceInV1 && (
+            <button
+              onClick={() => onModeChange?.("prefilled-v2")}
+              className="text-xs text-blue-600 hover:text-blue-800 ml-2 focus:outline-none"
+            >
+              clear
+            </button>
+          )}
         </div>
-      )}
-    </div>
-  );
+        {expandedFilters[filterKey] && (
+          <div className="ml-5 space-y-1">
+            {children}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const LeadCard = ({ lead, mode }: { lead: typeof mockLeads[0]; mode: "empty" | "prefilled-v1" | "prefilled-v2" }) => {
     if (mode === "prefilled-v1" || mode === "prefilled-v2") {
@@ -220,7 +272,27 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
               <div className="h-3 rounded bg-gray-300 w-32"></div>
               <div className="h-3 rounded bg-gray-300 w-28"></div>
               {getRandomInteraction(lead.id) && (
-                <p className="text-xs text-gray-600 font-semibold">{getRandomInteraction(lead.id)}</p>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <p className="text-xs text-gray-600 font-semibold">{getRandomInteraction(lead.id)}</p>
+                        <Info className="h-3 w-3 text-gray-400 cursor-help" />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-xs">
+                      <div className="space-y-1">
+                        <p className="font-medium text-xs">Sample interactions:</p>
+                        {getSampleInteractions(lead.id).interactions.map((interaction, index) => (
+                          <p key={index} className="text-xs">• {interaction}</p>
+                        ))}
+                        {getSampleInteractions(lead.id).hasMore && (
+                          <p className="text-xs italic">...and more</p>
+                        )}
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
             </div>
           </div>
@@ -232,15 +304,15 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
             </div>
             
             <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
+              <div className="p-2 text-gray-400 cursor-default">
                 <Mail className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
+              </div>
+              <div className="p-2 text-gray-400 cursor-default">
                 <Phone className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
+              </div>
+              <div className="p-2 text-gray-400 cursor-default">
                 <Send className="h-4 w-4" />
-              </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -276,15 +348,15 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
           </div>
           
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
+            <div className="p-2 text-gray-400 cursor-default">
               <Mail className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
+            </div>
+            <div className="p-2 text-gray-400 cursor-default">
               <Phone className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
+            </div>
+            <div className="p-2 text-gray-400 cursor-default">
               <Send className="h-4 w-4" />
-            </Button>
+            </div>
           </div>
         </div>
       </div>

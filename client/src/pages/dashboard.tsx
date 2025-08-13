@@ -31,12 +31,12 @@ export default function Dashboard() {
       case "analytics":
         return <WireframePlaceholder title="Analytics" />;
       case "searcher-empty":
-        return <SearcherEmpty onSwitchToPrefilled={() => {
-          setMode("prefilled-v1");
+        return <SearcherEmpty onSwitchToPrefilled={(targetMode) => {
+          setMode(targetMode || "prefilled-v1");
           setActiveView("searcher");
         }} />;
       case "searcher":
-        return <Searcher mode={mode} />;
+        return <Searcher mode={mode} onModeChange={setMode} />;
       case "saved-lists":
         return <SavedSearchesView 
           mode={mode} 
@@ -81,7 +81,7 @@ export default function Dashboard() {
               className={`${mode === "prefilled-v1" ? "bg-gray-200 text-gray-900" : "bg-white text-gray-600 hover:bg-gray-50"} px-4 py-2 text-sm border-l border-gray-300 focus:outline-none`}
               onClick={() => handleSetMode("prefilled-v1")}
             >
-              Pre-filled V1
+              Pre-filled V1 (CI)
             </button>
             <button
               role="tab"
@@ -89,7 +89,7 @@ export default function Dashboard() {
               className={`${mode === "prefilled-v2" ? "bg-gray-200 text-gray-900" : "bg-white text-gray-600 hover:bg-gray-50"} px-4 py-2 text-sm border-l border-gray-300 focus:outline-none`}
               onClick={() => handleSetMode("prefilled-v2")}
             >
-              Pre-filled V2
+              Pre-filled V2 (Non-CI)
             </button>
           </div>
           <span className="text-xs text-gray-500 italic">V1 and V2 differ only in the `Searcher` tab</span>

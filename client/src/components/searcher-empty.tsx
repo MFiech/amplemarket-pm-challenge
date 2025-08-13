@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, ChevronDown, ChevronRight } from "lucide-react";
 
 interface SearcherEmptyProps {
-  onSwitchToPrefilled?: () => void;
+  onSwitchToPrefilled?: (mode?: "prefilled-v1" | "prefilled-v2") => void;
 }
 
 export default function SearcherEmpty({ onSwitchToPrefilled }: SearcherEmptyProps) {
@@ -124,8 +124,92 @@ export default function SearcherEmpty({ onSwitchToPrefilled }: SearcherEmptyProp
 
         {/* Empty State Content */}
         <Card className="border-2 border-dashed border-gray-300" data-testid="empty-state">
-          <CardContent className="p-12 text-center">
-            {/* Empty for now - will be rewritten soon */}
+          <CardContent className="p-12">
+            {/* Header - One column, centered */}
+            <div className="text-center mb-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">Your next deal is a click away 🎯</h2>
+              <p className="text-lg text-gray-600">Leverage our Searcher to browse our database of 200M+ high-quality leads.</p>
+            </div>
+
+            {/* Two ways header */}
+            <div className="text-center mb-8">
+              <h3 className="text-xl font-semibold text-gray-900">You can start in two ways:</h3>
+            </div>
+
+            {/* Two approaches - Two columns */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+              {/* Column 1 - Manual search */}
+              <div className="text-center p-6 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors flex flex-col">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">🔍 Specify search criteria</h3>
+                <p className="text-gray-600 mb-4 flex-grow">Use any of 40+ filters about person or company.</p>
+                <Button 
+                  className="w-full bg-gray-400 hover:bg-gray-500 text-white"
+                  onClick={() => onSwitchToPrefilled?.("prefilled-v2")}
+                >
+                  Start with filters
+                </Button>
+              </div>
+
+              {/* Column 2 - AI/Competitor search */}
+              <div className="text-center p-6 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors flex flex-col">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">🤖 Find prospects evaluating your competitors</h3>
+                <p className="text-gray-600 mb-4 flex-grow">Let our AI-algorithm show you the prospects who have interacted with your competitors many times.</p>
+                <Button 
+                  className="w-full bg-gray-400 hover:bg-gray-500 text-white"
+                  onClick={() => onSwitchToPrefilled?.("prefilled-v1")}
+                >
+                  Show competitor prospects
+                </Button>
+              </div>
+            </div>
+
+            {/* Mix option - One column */}
+            <div className="text-center mb-12">
+              <p className="text-gray-600">... or mix & add these two ways together 🚀</p>
+            </div>
+
+            {/* Recommended searches - One column */}
+            <div className="text-center mb-6">
+              <p className="text-gray-700 mb-6">Still not sure? Use some of the recommended searches for your product & industry: 💡</p>
+              
+              {/* Sample searches - 3-column layout */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <button 
+                  className="p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors text-center"
+                  onClick={() => onSwitchToPrefilled?.("prefilled-v1")}
+                >
+                  <span className="font-medium text-gray-900">💼 SaaS Decision Makers</span>
+                </button>
+                <button 
+                  className="p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors text-center"
+                  onClick={() => onSwitchToPrefilled?.("prefilled-v1")}
+                >
+                  <span className="font-medium text-gray-900">🏢 Enterprise IT Leaders</span>
+                </button>
+                <button 
+                  className="p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors text-center"
+                  onClick={() => onSwitchToPrefilled?.("prefilled-v1")}
+                >
+                  <span className="font-medium text-gray-900">📈 Marketing Directors</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Footer help link */}
+            <div className="text-center">
+              <p className="text-sm text-gray-500">
+                Have any questions? Check our{" "}
+                <a 
+                  href="https://university.amplemarket.com/courses/searcher" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-blue-600 hover:text-blue-800 underline"
+                >
+                  Help Article on Searcher
+                </a>
+                .
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
