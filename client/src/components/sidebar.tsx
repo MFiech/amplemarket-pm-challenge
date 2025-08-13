@@ -176,10 +176,20 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
           <div className="flex-1">
             {/* Duo Copilot + Overview */}
             <div className="space-y-2">
-              <NavButton view="duo-copilot" icon={BarChart3}>
+              <NavButton 
+                view="duo-copilot" 
+                icon={BarChart3}
+                disabled={mode === "empty"}
+                tooltip={mode === "empty" ? "These sections changes only after the user completed setup and onboarding. Switch to \"Pre-filled\" version to see the changes." : undefined}
+              >
                 Duo Copilot
               </NavButton>
-              <NavButton view="overview" icon={Home}>
+              <NavButton 
+                view="overview" 
+                icon={Home}
+                disabled={mode === "empty"}
+                tooltip={mode === "empty" ? "These sections changes only after the user completed setup and onboarding. Switch to \"Pre-filled\" version to see the changes." : undefined}
+              >
                 Overview
               </NavButton>
             </div>
@@ -278,10 +288,20 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
         <div className="flex-1">
           {/* Duo Copilot + Overview grouped */}
           <div className="mb-4 space-y-1">
-            <NavButton view="duo-copilot" icon={BarChart3}>
+            <NavButton 
+              view="duo-copilot" 
+              icon={BarChart3}
+              disabled={mode === "empty"}
+              tooltip={mode === "empty" ? "These sections changes only after the user completed setup and onboarding. Switch to \"Pre-filled\" version to see the changes." : undefined}
+            >
               Duo Copilot
             </NavButton>
-            <NavButton view="overview" icon={Home}>
+            <NavButton 
+              view="overview" 
+              icon={Home}
+              disabled={mode === "empty"}
+              tooltip={mode === "empty" ? "These sections changes only after the user completed setup and onboarding. Switch to \"Pre-filled\" version to see the changes." : undefined}
+            >
               Overview
             </NavButton>
           </div>

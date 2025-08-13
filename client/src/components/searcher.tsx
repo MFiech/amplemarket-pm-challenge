@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Phone, Mail, Send, ArrowUpDown, ChevronDown, ChevronRight, X } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Check, Phone, Mail, Send, ArrowUpDown, ChevronDown, ChevronRight, X, Calendar } from "lucide-react";
 
 const mockLeads = [
   {
@@ -87,6 +88,15 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
   const [seniorityChips, setSeniorityChips] = useState(
     mode === "prefilled" ? ["VP", "Head"] : []
   );
+  const [dateFilter, setDateFilter] = useState("last_2_weeks");
+
+  // Function to generate random interaction data
+  const getRandomInteraction = (leadId: number) => {
+    const companies = ["ACME", "Google", "Apple"];
+    const randomCompany = companies[leadId % companies.length];
+    const randomInteractions = Math.floor(Math.random() * 9) + 1; // 1-9 interactions
+    return `Interacted with ${randomCompany} ${randomInteractions} times in the last 2 weeks.`;
+  };
 
   const toggleFilter = (filterName: keyof typeof expandedFilters) => {
     setExpandedFilters(prev => ({
@@ -168,6 +178,7 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
               </div>
               <div className="h-3 rounded bg-gray-300 w-32"></div>
               <div className="h-3 rounded bg-gray-300 w-28"></div>
+              <p className="text-xs text-gray-600 font-semibold">{getRandomInteraction(lead.id)}</p>
             </div>
           </div>
           
@@ -178,13 +189,13 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
             </div>
             
             <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+              <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
                 <Mail className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+              <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
                 <Phone className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+              <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
                 <Send className="h-4 w-4" />
               </Button>
             </div>
@@ -203,8 +214,8 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
           <div>
             <div className="flex items-center space-x-2">
               <h4 className="font-medium text-gray-900">{lead.name}</h4>
-              <span className="text-blue-500">in</span>
-              <span className="text-blue-500">LinkedIn</span>
+              <span className="text-gray-500">in</span>
+              <span className="text-gray-500">LinkedIn</span>
             </div>
             <p className="text-sm text-gray-500">{lead.title}</p>
             <p className="text-sm text-gray-400">{lead.location}</p>
@@ -214,21 +225,21 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
         <div className="flex items-center space-x-6">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-blue-500">{lead.company}</span>
-              <span className="text-blue-500">in</span>
-              <span className="text-blue-500">LinkedIn</span>
+              <span className="text-gray-500">{lead.company}</span>
+              <span className="text-gray-500">in</span>
+              <span className="text-gray-500">LinkedIn</span>
             </div>
             <p className="text-sm text-gray-400">{lead.employees}</p>
           </div>
           
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+            <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
               <Mail className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+            <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
               <Phone className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="text-blue-500 hover:bg-blue-50">
+            <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-50">
               <Send className="h-4 w-4" />
             </Button>
           </div>
@@ -248,10 +259,27 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
         <div className="mb-6 space-y-3">
           <CollapsibleFilter name="Competitors Intelligence" filterKey="competitorsIntelligence">
             {mode === "prefilled" ? (
-              <ChipInput
-                chips={competitorChips}
-                placeholder="Add competitors..."
-              />
+              <div className="space-y-3">
+                <ChipInput
+                  chips={competitorChips}
+                  placeholder="Add competitors..."
+                />
+                <div className="space-y-1">
+                  <label className="text-xs text-gray-600">Interaction detection dates</label>
+                  <Select value={dateFilter} onValueChange={setDateFilter}>
+                    <SelectTrigger className="h-8 text-xs border-gray-300 bg-white">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="last_week">Last week</SelectItem>
+                      <SelectItem value="last_2_weeks">Last 2 weeks</SelectItem>
+                      <SelectItem value="last_month">Last month</SelectItem>
+                      <SelectItem value="last_3_months">Last 3 months</SelectItem>
+                      <SelectItem value="custom">Custom range</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             ) : (
               <>
                 <div className="h-3 rounded bg-gray-300 w-28" />
@@ -322,20 +350,20 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
                 <Check className="h-4 w-4 text-gray-400 mr-1" />
                 <span className="text-sm text-gray-600">0 Selected</span>
               </span>
-              <Button variant="outline" size="sm" className="text-sm border-gray-300">
+              <Button variant="outline" size="sm" className="text-sm border-gray-300 cursor-default hover:bg-gray-50">
                 Track Job Changes
               </Button>
-              <Button variant="outline" size="sm" className="text-sm border-gray-300 bg-blue-50 text-blue-700">
+              <Button variant="outline" size="sm" className="text-sm border-gray-300 bg-gray-50 text-gray-700 cursor-default hover:bg-gray-50">
                 Add to List
               </Button>
-              <Button variant="outline" size="sm" className="text-sm border-gray-300 bg-blue-50 text-blue-700">
+              <Button variant="outline" size="sm" className="text-sm border-gray-300 bg-gray-50 text-gray-700 cursor-default hover:bg-gray-50">
                 Add to Sequence
               </Button>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-500">1 - 30 of 2,249,478</span>
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="sm" className="text-sm">
+                <Button variant="ghost" size="sm" className="text-sm cursor-default hover:bg-transparent">
                   <ArrowUpDown className="h-4 w-4 mr-1" />
                   Sort by: Relevancy
                 </Button>

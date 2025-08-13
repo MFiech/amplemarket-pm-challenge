@@ -36,7 +36,10 @@ export default function Dashboard() {
       case "searcher":
         return <Searcher mode={mode} />;
       case "saved-lists":
-        return <SavedSearchesView mode={mode} />;
+        return <SavedSearchesView 
+          mode={mode} 
+          onNavigateToSearcher={() => setActiveView("searcher-empty")}
+        />;
       case "duo-copilot":
         return <WireframePlaceholder title="Duo Copilot" />;
       case "settings":

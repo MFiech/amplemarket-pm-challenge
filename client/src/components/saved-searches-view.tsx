@@ -6,9 +6,10 @@ type Mode = "empty" | "prefilled";
 
 interface SavedSearchesViewProps {
   mode?: Mode;
+  onNavigateToSearcher?: () => void;
 }
 
-export default function SavedSearchesView({ mode = "empty" }: SavedSearchesViewProps) {
+export default function SavedSearchesView({ mode = "empty", onNavigateToSearcher }: SavedSearchesViewProps) {
   return (
     <div className="flex flex-col h-full bg-gray-50">
       {/* Header */}
@@ -131,6 +132,34 @@ export default function SavedSearchesView({ mode = "empty" }: SavedSearchesViewP
             </TableBody>
           </Table>
         </div>
+
+        {/* Educational row - only for empty state */}
+        {mode === "empty" && (
+          <div className="mt-6 bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+            <div className="flex items-start space-x-3">
+              <span className="text-2xl">💡</span>
+              <div className="flex-1 text-sm text-gray-600 leading-relaxed">
+                Above is a sample saved search with the high-intent prospects that interacted with your competitors recently. 
+                Any time you save any search configuration in Amplemarket{" "}
+                <button 
+                  className="text-gray-700 underline hover:text-gray-900 font-medium"
+                  onClick={() => onNavigateToSearcher?.()}
+                >
+                  "Searcher"
+                </button>
+                , it'll appear here. Check our{" "}
+                <a 
+                  href="https://university.amplemarket.com/courses/saved-searches" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-700 underline hover:text-gray-900 font-medium"
+                >
+                  docs on how to use "Saved Searches"
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
