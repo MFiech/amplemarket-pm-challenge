@@ -87,8 +87,8 @@ export default function ContactFeed() {
           <CardContent className="p-8">
             <div className="max-w-md mx-auto">
               <div className="text-6xl mb-4">👋</div>
-              <p className="text-slate-600 mb-4">15 new leads are ready.</p>
-              <p className="text-slate-600 mb-6">Pick one to start!</p>
+              <p className="text-slate-600 mb-4">15 new prospects are ready.</p>
+              <p className="text-slate-600 mb-6">Select a prospect to begin.</p>
               <Button className="bg-brand-600 hover:bg-brand-700" data-testid="start-engaging">
                 Start Engaging
               </Button>

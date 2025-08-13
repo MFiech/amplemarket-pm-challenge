@@ -110,8 +110,8 @@ export default function SequencesView() {
         <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-8">
           <div className="max-w-md mx-auto">
             <div className="text-6xl mb-4">👋</div>
-            <p className="text-slate-600 mb-4">15 new leads are ready.</p>
-            <p className="text-slate-600 mb-6">Pick one to start!</p>
+            <p className="text-slate-600 mb-4">15 new prospects are ready.</p>
+            <p className="text-slate-600 mb-6">Select a prospect to begin.</p>
             <Button className="bg-brand-600 text-white px-6 py-3 hover:bg-brand-700" data-testid="button-start-engaging">
               Start Engaging
             </Button>

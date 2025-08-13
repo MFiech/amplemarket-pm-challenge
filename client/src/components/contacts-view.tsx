@@ -9,7 +9,7 @@ export default function ContactsView() {
     <div className="p-6" data-testid="contacts-view">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-900 mb-2">Contacts</h1>
-        <p className="text-slate-600">Manage your contact database and engagement history</p>
+        <p className="text-slate-600">Manage contacts and engagement history.</p>
       </div>
 
       {/* Search and Filters */}

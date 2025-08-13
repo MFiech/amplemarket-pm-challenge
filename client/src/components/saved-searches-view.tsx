@@ -140,21 +140,21 @@ export default function SavedSearchesView({ mode = "empty", onNavigateToSearcher
               <span className="text-2xl">💡</span>
               <div className="flex-1 text-sm text-gray-600 leading-relaxed">
                 Above is a sample saved search with the high-intent prospects that interacted with your competitors recently. 
-                Any time you save any search configuration in Amplemarket{" "}
+                When you save a search in Amplemarket {""}
                 <button 
                   className="text-gray-700 underline hover:text-gray-900 font-medium"
                   onClick={() => onNavigateToSearcher?.()}
                 >
-                  "Searcher"
+                  Searcher
                 </button>
-                , it'll appear here. Check our{" "}
+                , it appears here. Learn how to use Saved Searches in our {""}
                 <a 
                   href="https://university.amplemarket.com/courses/saved-searches" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="text-gray-700 underline hover:text-gray-900 font-medium"
                 >
-                  docs on how to use "Saved Searches"
+                  docs
                 </a>
               </div>
             </div>

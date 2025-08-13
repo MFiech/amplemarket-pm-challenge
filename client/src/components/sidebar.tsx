@@ -180,7 +180,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
                 view="duo-copilot" 
                 icon={BarChart3}
                 disabled={mode === "empty"}
-                tooltip={mode === "empty" ? "These sections changes only after the user completed setup and onboarding. Switch to \"Pre-filled\" version to see the changes." : undefined}
+                tooltip={mode === "empty" ? "These sections appear after setup and onboarding. Switch to \"Pre-filled\" to preview." : undefined}
               >
                 Duo Copilot
               </NavButton>
@@ -188,7 +188,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
                 view="overview" 
                 icon={Home}
                 disabled={mode === "empty"}
-                tooltip={mode === "empty" ? "These sections changes only after the user completed setup and onboarding. Switch to \"Pre-filled\" version to see the changes." : undefined}
+                tooltip={mode === "empty" ? "These sections appear after setup and onboarding. Switch to \"Pre-filled\" to preview." : undefined}
               >
                 Overview
               </NavButton>
@@ -253,7 +253,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
 
           {/* Settings at very bottom */}
           <div className="pt-3 border-t border-gray-300">
-            <NavButton view="settings" icon={Settings} disabled tooltip="Not included in prototype, although new features will have their setup here (competitots, email/slack alerts, digests).">
+            <NavButton view="settings" icon={Settings} disabled tooltip="Not included in this prototype. Configure new features here (competitors, alerts, digests).">
               Settings
             </NavButton>
           </div>
@@ -292,7 +292,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
               view="duo-copilot" 
               icon={BarChart3}
               disabled={mode === "empty"}
-              tooltip={mode === "empty" ? "These sections changes only after the user completed setup and onboarding. Switch to \"Pre-filled\" version to see the changes." : undefined}
+              tooltip={mode === "empty" ? "These sections appear after setup and onboarding. Switch to \"Pre-filled\" to preview." : undefined}
             >
               Duo Copilot
             </NavButton>
@@ -300,7 +300,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
               view="overview" 
               icon={Home}
               disabled={mode === "empty"}
-              tooltip={mode === "empty" ? "These sections changes only after the user completed setup and onboarding. Switch to \"Pre-filled\" version to see the changes." : undefined}
+              tooltip={mode === "empty" ? "These sections appear after setup and onboarding. Switch to \"Pre-filled\" to preview." : undefined}
             >
               Overview
             </NavButton>
@@ -321,7 +321,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
                 <NavButton view="saved-lists" icon={Bookmark}>
                   Saved Searches
                 </NavButton>
-                <NavButton view="lists" icon={List} disabled tooltip="Not available in this prototype">
+              <NavButton view="lists" icon={List} disabled tooltip="Unavailable in this prototype">
                   Lists
                 </NavButton>
               </div>
@@ -333,13 +333,13 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
             <SectionToggle section="engage">Engage</SectionToggle>
             {expandedSections.engage && (
               <div className="ml-6 mt-1 space-y-1">
-                <NavButton view="sequences" icon={Send} disabled tooltip="Not available in this prototype">
+              <NavButton view="sequences" icon={Send} disabled tooltip="Unavailable in this prototype">
                   Sequences
                 </NavButton>
-                <NavButton view="calls" icon={Phone} disabled tooltip="Not available in this prototype">
+              <NavButton view="calls" icon={Phone} disabled tooltip="Unavailable in this prototype">
                   Calls
                 </NavButton>
-                <NavButton view="tasks" icon={CheckSquare} disabled tooltip="Not available in this prototype">
+              <NavButton view="tasks" icon={CheckSquare} disabled tooltip="Unavailable in this prototype">
                   Tasks
                 </NavButton>
               </div>
@@ -351,10 +351,10 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
             <SectionToggle section="analyze">Analyze</SectionToggle>
             {expandedSections.analyze && (
               <div className="ml-6 mt-1 space-y-1">
-                <NavButton view="analytics" icon={BarChart3} disabled tooltip="Not available in this prototype">
+              <NavButton view="analytics" icon={BarChart3} disabled tooltip="Unavailable in this prototype">
                   Analytics
                 </NavButton>
-                <NavButton view="contacts" icon={Users} disabled tooltip="Not available in this prototype">
+              <NavButton view="contacts" icon={Users} disabled tooltip="Unavailable in this prototype">
                   Contacts
                 </NavButton>
               </div>
@@ -366,7 +366,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
             <SectionToggle section="automate">Automate</SectionToggle>
             {expandedSections.automate && (
               <div className="ml-6 mt-1 space-y-1">
-                <NavButton view="workflows" icon={ServerCog} disabled tooltip="Not available in this prototype">
+              <NavButton view="workflows" icon={ServerCog} disabled tooltip="Unavailable in this prototype">
                   Workflows
                 </NavButton>
               </div>
@@ -376,7 +376,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
 
         {/* Settings at very bottom */}
         <div className="pt-4 border-t border-gray-300">
-          <NavButton view="settings" icon={Settings} disabled tooltip="Not included in prototype, although new features will have their setup here (competitots, email/slack alerts, digests).">
+          <NavButton view="settings" icon={Settings} disabled tooltip="Not included in this prototype. Configure new features here (competitors, alerts, digests).">
             Settings
           </NavButton>
         </div>

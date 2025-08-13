@@ -134,7 +134,7 @@ export default function OverviewView({ mode = "empty" }: OverviewViewProps) {
           <div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center">
             <div className="text-center">
               <Send className="h-16 w-16 text-slate-300 mb-2 mx-auto" />
-              <p className="text-slate-500">Performance chart would be displayed here</p>
+              <p className="text-slate-500">Charts will appear here.</p>
             </div>
           </div>
         </CardContent>

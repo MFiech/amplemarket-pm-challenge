@@ -12,9 +12,7 @@ export default function SettingsView() {
               <h3 className="text-xl font-medium text-gray-900 mb-2">
                 Settings
               </h3>
-              <p className="text-gray-500">
-                Settings functionality will be available here
-              </p>
+              <p className="text-gray-500">Settings will be available here.</p>
             </div>
           </CardContent>
         </Card>

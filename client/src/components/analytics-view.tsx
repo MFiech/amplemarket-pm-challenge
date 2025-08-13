@@ -36,7 +36,7 @@ export default function AnalyticsView() {
     <div className="p-6" data-testid="analytics-view">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-900 mb-2">Analytics</h1>
-        <p className="text-slate-600">Track your outreach performance and engagement metrics</p>
+        <p className="text-slate-600">Monitor outreach and engagement performance.</p>
       </div>
 
       {/* Analytics Dashboard */}
@@ -74,7 +74,7 @@ export default function AnalyticsView() {
           <div className="h-80 bg-slate-50 rounded-lg flex items-center justify-center">
             <div className="text-center">
               <div className="text-4xl text-slate-300 mb-2">📈</div>
-              <p className="text-slate-500">Interactive analytics chart would be displayed here</p>
+              <p className="text-slate-500">Charts will appear here.</p>
             </div>
           </div>
         </CardContent>

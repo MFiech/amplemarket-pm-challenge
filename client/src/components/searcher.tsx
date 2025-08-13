@@ -128,7 +128,7 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
         : [];
     const randomCompany = companies[leadId % companies.length];
     const randomInteractions = Math.floor(Math.random() * 9) + 1; // 1-9 interactions
-    return `Interacted with ${randomCompany} ${randomInteractions} times in the last 2 weeks.`;
+    return `Engaged with ${randomCompany} ${randomInteractions} times in the last 2 weeks.`;
   };
 
   const toggleFilter = (filterName: keyof typeof expandedFilters) => {

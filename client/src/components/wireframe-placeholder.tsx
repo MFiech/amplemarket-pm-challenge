@@ -12,7 +12,7 @@ export default function WireframePlaceholder({ title = "Feature" }: WireframePla
           <Search className="h-12 w-12 text-gray-400" />
         </div>
         <h2 className="text-xl font-medium text-gray-800 mb-2">Not part of main wireframe</h2>
-        <p className="text-gray-600 mb-4">{title} is not included in this wireframe prototype</p>
+        <p className="text-gray-600 mb-4">This prototype doesn’t include {title}.</p>
         <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-8">
           <div className="space-y-4">
             <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>

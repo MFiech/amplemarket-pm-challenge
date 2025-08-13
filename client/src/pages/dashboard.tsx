@@ -92,7 +92,7 @@ export default function Dashboard() {
               Pre-filled V2
             </button>
           </div>
-          <span className="text-xs text-gray-500 italic">V1 and V2 differ only in the Searcher tab</span>
+          <span className="text-xs text-gray-500 italic">V1 and V2 differ only in the `Searcher` tab</span>
         </div>
       </div>
 

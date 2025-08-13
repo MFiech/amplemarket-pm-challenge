@@ -107,7 +107,7 @@ export default function SequenceOverview() {
           <div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center">
             <div className="text-center">
               <div className="text-4xl text-slate-300 mb-2">📊</div>
-              <p className="text-slate-500">Performance chart would be displayed here</p>
+              <p className="text-slate-500">Charts will appear here.</p>
             </div>
           </div>
         </CardContent>
