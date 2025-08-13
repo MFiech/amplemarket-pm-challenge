@@ -12,7 +12,7 @@ import WireframePlaceholder from "@/components/wireframe-placeholder";
 
 type ViewType = "overview" | "sequences" | "contacts" | "analytics" | "searcher" | "searcher-empty" | "saved-lists" | "lists" | "calls" | "tasks" | "workflows" | "duo-copilot" | "settings";
 
-type Mode = "empty" | "prefilled";
+type Mode = "empty" | "prefilled-v1" | "prefilled-v2";
 
 export default function Dashboard() {
   const [mode, setMode] = useState<Mode>("empty");
@@ -30,7 +30,7 @@ export default function Dashboard() {
         return <WireframePlaceholder title="Analytics" />;
       case "searcher-empty":
         return <SearcherEmpty onSwitchToPrefilled={() => {
-          setMode("prefilled");
+          setMode("prefilled-v1");
           setActiveView("searcher");
         }} />;
       case "searcher":
@@ -53,7 +53,7 @@ export default function Dashboard() {
     setMode(newMode);
     // Only auto-switch to searcher views if we're currently on the opposite searcher view
     if ((newMode === "empty" && activeView === "searcher") || 
-        (newMode === "prefilled" && activeView === "searcher-empty")) {
+        ((newMode === "prefilled-v1" || newMode === "prefilled-v2") && activeView === "searcher-empty")) {
       setActiveView(newMode === "empty" ? "searcher-empty" : "searcher");
     }
   };
@@ -62,23 +62,35 @@ export default function Dashboard() {
     <div className="flex flex-col h-screen overflow-hidden bg-gray-100">
       {/* Top Bar */}
       <div className="border-b border-gray-300 bg-white p-3 flex items-center justify-center">
-        <div className="inline-flex rounded-md border border-gray-300 overflow-hidden" role="tablist" aria-label="Data mode toggle">
-          <button
-            role="tab"
-            aria-selected={mode === "empty"}
-            className={`${mode === "empty" ? "bg-gray-200 text-gray-900" : "bg-white text-gray-600 hover:bg-gray-50"} px-4 py-2 text-sm focus:outline-none`}
-            onClick={() => handleSetMode("empty")}
-          >
-            Empty states (new user)
-          </button>
-          <button
-            role="tab"
-            aria-selected={mode === "prefilled"}
-            className={`${mode === "prefilled" ? "bg-gray-200 text-gray-900" : "bg-white text-gray-600 hover:bg-gray-50"} px-4 py-2 text-sm border-l border-gray-300 focus:outline-none`}
-            onClick={() => handleSetMode("prefilled")}
-          >
-            Pre-filled data
-          </button>
+        <div className="flex items-center space-x-3">
+          <span className="text-sm font-bold text-gray-900">Select prototype version:</span>
+          <div className="inline-flex rounded-md border border-gray-300 overflow-hidden" role="tablist" aria-label="Prototype version toggle">
+            <button
+              role="tab"
+              aria-selected={mode === "empty"}
+              className={`${mode === "empty" ? "bg-gray-200 text-gray-900" : "bg-white text-gray-600 hover:bg-gray-50"} px-4 py-2 text-sm focus:outline-none`}
+              onClick={() => handleSetMode("empty")}
+            >
+              Empty states
+            </button>
+            <button
+              role="tab"
+              aria-selected={mode === "prefilled-v1"}
+              className={`${mode === "prefilled-v1" ? "bg-gray-200 text-gray-900" : "bg-white text-gray-600 hover:bg-gray-50"} px-4 py-2 text-sm border-l border-gray-300 focus:outline-none`}
+              onClick={() => handleSetMode("prefilled-v1")}
+            >
+              Pre-filled V1
+            </button>
+            <button
+              role="tab"
+              aria-selected={mode === "prefilled-v2"}
+              className={`${mode === "prefilled-v2" ? "bg-gray-200 text-gray-900" : "bg-white text-gray-600 hover:bg-gray-50"} px-4 py-2 text-sm border-l border-gray-300 focus:outline-none`}
+              onClick={() => handleSetMode("prefilled-v2")}
+            >
+              Pre-filled V2
+            </button>
+          </div>
+          <span className="text-xs text-gray-500 italic">V1 and V2 differ only in the Searcher tab</span>
         </div>
       </div>
 

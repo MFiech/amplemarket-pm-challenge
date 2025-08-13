@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, Send, MoreHorizontal } from "lucide-react";
 
-type Mode = "empty" | "prefilled";
+type Mode = "empty" | "prefilled-v1" | "prefilled-v2";
 
 interface SavedSearchesViewProps {
   mode?: Mode;
@@ -94,7 +94,7 @@ export default function SavedSearchesView({ mode = "empty", onNavigateToSearcher
                 </TableCell>
               </TableRow>
               
-              {mode === "prefilled" && Array.from({ length: 10 }, (_, index) => (
+              {(mode === "prefilled-v1" || mode === "prefilled-v2") && Array.from({ length: 10 }, (_, index) => (
                 <TableRow key={`placeholder-${index}`} className="hover:bg-gray-50">
                   <TableCell>
                     <input type="checkbox" className="rounded border-gray-300" />

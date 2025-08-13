@@ -5,7 +5,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { ChevronDown, ChevronRight, BarChart3, Home, Search, Bookmark, List, Send, Phone, CheckSquare, Users, ServerCog, PanelLeftClose, PanelLeftOpen, Settings } from "lucide-react";
 
 type ViewType = "overview" | "sequences" | "contacts" | "analytics" | "searcher" | "searcher-empty" | "saved-lists" | "lists" | "calls" | "tasks" | "workflows" | "duo-copilot" | "settings";
-type Mode = "empty" | "prefilled";
+type Mode = "empty" | "prefilled-v1" | "prefilled-v2";
 
 interface SidebarProps {
   activeView: ViewType;

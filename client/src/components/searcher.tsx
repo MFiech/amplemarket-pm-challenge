@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -72,33 +72,74 @@ const mockLeads = [
 ];
 
 interface SearcherProps {
-  mode?: "empty" | "prefilled";
+  mode?: "empty" | "prefilled-v1" | "prefilled-v2";
 }
 
 export default function Searcher({ mode = "empty" }: SearcherProps) {
+  const isPrefilled = mode === "prefilled-v1" || mode === "prefilled-v2";
+  
   const [expandedFilters, setExpandedFilters] = useState({
-    competitorsIntelligence: mode === "prefilled",
+    competitorsIntelligence: mode === "prefilled-v1", // Only expand for V1, not V2
     churnAlerts: false,
-    seniority: mode === "prefilled"
+    seniority: isPrefilled
   });
 
   const [competitorChips, setCompetitorChips] = useState(
-    mode === "prefilled" ? ["ACME", "Google", "Apple"] : []
+    isPrefilled ? (mode === "prefilled-v1" ? ["ACME", "Google", "Apple"] : ["Salesforce", "HubSpot", "Pipedrive"]) : []
   );
   const [seniorityChips, setSeniorityChips] = useState(
-    mode === "prefilled" ? ["VP", "Head"] : []
+    isPrefilled ? (mode === "prefilled-v1" ? ["VP", "Head"] : ["Director", "C-Level"]) : []
   );
   const [dateFilter, setDateFilter] = useState("last_2_weeks");
 
+  // Update filter states when mode changes
+  useEffect(() => {
+    const isPrefilled = mode === "prefilled-v1" || mode === "prefilled-v2";
+    
+    setExpandedFilters({
+      competitorsIntelligence: mode === "prefilled-v1", // Only expand for V1, not V2
+      churnAlerts: false,
+      seniority: isPrefilled
+    });
+
+    setCompetitorChips(
+      isPrefilled ? (mode === "prefilled-v1" ? ["ACME", "Google", "Apple"] : ["Salesforce", "HubSpot", "Pipedrive"]) : []
+    );
+
+    setSeniorityChips(
+      isPrefilled ? (mode === "prefilled-v1" ? ["VP", "Head"] : ["Director", "C-Level"]) : []
+    );
+  }, [mode]);
+
+  // For V2, show all prospects but only some have interaction text
+  const filteredLeads = mockLeads;
+
   // Function to generate random interaction data
   const getRandomInteraction = (leadId: number) => {
-    const companies = ["ACME", "Google", "Apple"];
+    // In V2, only show interactions for specific prospects (IDs 2, 4, 6)
+    if (mode === "prefilled-v2" && ![2, 4, 6].includes(leadId)) {
+      return null; // No interaction text for these prospects
+    }
+    
+    const companies = mode === "prefilled-v1" 
+      ? ["ACME", "Google", "Apple"] 
+      : mode === "prefilled-v2" 
+        ? ["Salesforce", "HubSpot", "Pipedrive"]
+        : [];
     const randomCompany = companies[leadId % companies.length];
     const randomInteractions = Math.floor(Math.random() * 9) + 1; // 1-9 interactions
     return `Interacted with ${randomCompany} ${randomInteractions} times in the last 2 weeks.`;
   };
 
   const toggleFilter = (filterName: keyof typeof expandedFilters) => {
+    // Prevent expansion of certain filters based on mode
+    if (mode === "prefilled-v2" && (filterName === "competitorsIntelligence" || filterName === "churnAlerts")) {
+      return; // Do nothing - don't allow expansion
+    }
+    if ((mode === "prefilled-v1" || mode === "prefilled-v2") && filterName === "churnAlerts") {
+      return; // Disable churn alerts expansion in both V1 and V2
+    }
+    
     setExpandedFilters(prev => ({
       ...prev,
       [filterName]: !prev[filterName]
@@ -163,8 +204,8 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
     </div>
   );
 
-  const LeadCard = ({ lead, mode }: { lead: typeof mockLeads[0]; mode: "empty" | "prefilled" }) => {
-    if (mode === "prefilled") {
+  const LeadCard = ({ lead, mode }: { lead: typeof mockLeads[0]; mode: "empty" | "prefilled-v1" | "prefilled-v2" }) => {
+    if (mode === "prefilled-v1" || mode === "prefilled-v2") {
       return (
         <div className="flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50" data-testid={`lead-${lead.id}`}>
           <div className="flex items-center space-x-4">
@@ -178,7 +219,9 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
               </div>
               <div className="h-3 rounded bg-gray-300 w-32"></div>
               <div className="h-3 rounded bg-gray-300 w-28"></div>
-              <p className="text-xs text-gray-600 font-semibold">{getRandomInteraction(lead.id)}</p>
+              {getRandomInteraction(lead.id) && (
+                <p className="text-xs text-gray-600 font-semibold">{getRandomInteraction(lead.id)}</p>
+              )}
             </div>
           </div>
           
@@ -258,7 +301,7 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
         </div>
         <div className="mb-6 space-y-3">
           <CollapsibleFilter name="Competitors Intelligence" filterKey="competitorsIntelligence">
-            {mode === "prefilled" ? (
+            {isPrefilled ? (
               <div className="space-y-3">
                 <ChipInput
                   chips={competitorChips}
@@ -305,7 +348,7 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
             </div>
           </div>
           <CollapsibleFilter name="Seniority" filterKey="seniority">
-            {mode === "prefilled" ? (
+            {isPrefilled ? (
               <ChipInput
                 chips={seniorityChips}
                 placeholder="Add seniority levels..."
@@ -375,7 +418,7 @@ export default function Searcher({ mode = "empty" }: SearcherProps) {
         {/* Results */}
         <Card className="border-0 rounded-none" data-testid="search-results">
           <CardContent className="p-0">
-            {mockLeads.map((lead) => (
+            {filteredLeads.map((lead) => (
               <LeadCard key={lead.id} lead={lead} mode={mode} />
             ))}
           </CardContent>
