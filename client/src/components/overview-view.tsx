@@ -4,10 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Send, ChevronRight, Watch, UserCheck, Users, Mail } from "lucide-react";
 import { mockSequenceMetrics } from "@/lib/mock-data";
+import WireframePlaceholder from "@/components/wireframe-placeholder";
 
 type TabType = 'overview' | 'contacted' | 'remaining';
 
-export default function OverviewView() {
+interface OverviewViewProps {
+  mode?: "empty" | "prefilled-v1" | "prefilled-v2";
+}
+
+export default function OverviewView({ mode = "empty" }: OverviewViewProps) {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
 
   const MetricCard = ({ 
@@ -56,6 +61,12 @@ export default function OverviewView() {
       {children}
     </Button>
   );
+
+  const isPrefilled = mode === "prefilled-v1" || mode === "prefilled-v2";
+
+  if (!isPrefilled) {
+    return <WireframePlaceholder title="Overview" />;
+  }
 
   return (
     <div className="p-6">

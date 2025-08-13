@@ -253,7 +253,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
 
           {/* Settings at very bottom */}
           <div className="pt-3 border-t border-gray-300">
-            <NavButton view="settings" icon={Settings}>
+            <NavButton view="settings" icon={Settings} disabled tooltip="Not included in prototype, although new features will have their setup here (competitots, email/slack alerts, digests).">
               Settings
             </NavButton>
           </div>
@@ -376,7 +376,7 @@ export default function Sidebar({ activeView, onViewChange, mode }: SidebarProps
 
         {/* Settings at very bottom */}
         <div className="pt-4 border-t border-gray-300">
-          <NavButton view="settings" icon={Settings}>
+          <NavButton view="settings" icon={Settings} disabled tooltip="Not included in prototype, although new features will have their setup here (competitots, email/slack alerts, digests).">
             Settings
           </NavButton>
         </div>

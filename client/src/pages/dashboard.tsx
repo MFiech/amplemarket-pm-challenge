@@ -8,6 +8,8 @@ import SearcherEmpty from "@/components/searcher-empty";
 import Searcher from "@/components/searcher";
 import SettingsView from "@/components/settings-view";
 import SavedSearchesView from "@/components/saved-searches-view";
+import DuoCopilotView from "@/components/duo-copilot-view";
+import OverviewView from "@/components/overview-view";
 import WireframePlaceholder from "@/components/wireframe-placeholder";
 
 type ViewType = "overview" | "sequences" | "contacts" | "analytics" | "searcher" | "searcher-empty" | "saved-lists" | "lists" | "calls" | "tasks" | "workflows" | "duo-copilot" | "settings";
@@ -21,7 +23,7 @@ export default function Dashboard() {
   const renderMainContent = () => {
     switch (activeView) {
       case "overview":
-        return <WireframePlaceholder title="Overview" />;
+        return <OverviewView mode={mode} />;
       case "sequences":
         return <WireframePlaceholder title="Sequences" />;
       case "contacts":
@@ -41,7 +43,7 @@ export default function Dashboard() {
           onNavigateToSearcher={() => setActiveView("searcher-empty")}
         />;
       case "duo-copilot":
-        return <WireframePlaceholder title="Duo Copilot" />;
+        return <DuoCopilotView mode={mode} />;
       case "settings":
         return <SettingsView />;
       default:
